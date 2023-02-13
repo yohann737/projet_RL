@@ -36,3 +36,11 @@ class PolicyNetwork(nn.Module):
         y = F.relu(self.fc2(y))
         y = F.softmax(self.fc3(y))
         return y
+
+value_network = ValueNetwork()
+optimizer_value = optim.Adam(value_network.parameters, lr = 0.01)
+criterion_value = nn.MSELoss()
+
+policy_network = PolicyNetwork()
+optimizer_policy = optim.Adam(policy_network.parameters(), lr = 0.01)
+criterion_policy = nn.CrossEntropyLoss()

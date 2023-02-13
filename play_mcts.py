@@ -18,8 +18,7 @@ def play_game(root):
         else:
             mcts(root, iterations = 1000)
             node = select_child(root)
-            state_difference = [np.abs(root.state.board[i] - node.state.board[i]) for i in range(len(root.state.board))]
-            move = np.argmax(state_difference)
+            move = node.move
         state.play_move(move)
         root = Node(state = state)
     print(display_board(state.board))
