@@ -6,13 +6,10 @@ def get_human_move(state, current_player):
     symbols = {1: "X", -1: "O"}
     move = None
     while move is None:
-        try:
-            move = int(input("Player {}'s turn. Enter a move (0-8): ".format(symbols[current_player])))
-            if move not in state.get_possible_moves():
-                print("That space is already taken. Please choose another move.")
-                move = None
-        except ValueError:
-            print("Invalid input. Please enter a number between 0 and 8.")
+        move = int(input("Player {}'s turn. Enter a move (0-8): ".format(symbols[current_player])))
+        if move not in state.get_possible_moves():
+            print("Invalid move. Please choose another move.")
+            move = None
     return move
 def human_game():
     # Initialize the game state
@@ -64,9 +61,9 @@ def play_mcts(human_player):
     else:
         print('Draw!')
 
-human_player = None
 try_again = True
 while try_again:
+    human_player = None
     while human_player == None:
         human_starts = input("Do you want to play first (Y/N)?")
         human_starts = human_starts[0].upper()

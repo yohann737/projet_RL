@@ -71,7 +71,7 @@ def mcts(root, n):
 
 def get_mcts_move(state, player):
     root = Node(state, player)
-    mcts(root, 1000)
+    mcts(root,  10**4)
     node = root.children[0]
     max_score = node.wins / node.visits
     for child in root.children:
