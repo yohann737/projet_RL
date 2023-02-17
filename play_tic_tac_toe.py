@@ -1,7 +1,7 @@
 from mcts import *
 from tic_tac_toe import *
 
-def get_human_move(current_player):
+def get_human_move(state, current_player):
     # Define player symbols
     symbols = {1: "X", -1: "O"}
     move = None
@@ -11,8 +11,6 @@ def get_human_move(current_player):
             if move not in state.get_possible_moves():
                 print("That space is already taken. Please choose another move.")
                 move = None
-            else:
-                state.play_move(move, current_player)
         except ValueError:
             print("Invalid input. Please enter a number between 0 and 8.")
     return move
@@ -42,29 +40,19 @@ def human_game():
     elif result == 0:
         print("Game over! It's a draw!")
 
-def play_mcts():
+def play_mcts(human_player):
     state = TicTacToeState()
-    root = Node(state, 1)
-    human_player = 1
     ai_player = -1 * human_player
     current_player = 1
     while not state.is_game_over():
         state.display_board()
         print()
         if current_player == human_player:
-            move = get_human_move(current_player)
+            move = get_human_move(state, current_player)
+            state.display_board()
+            print(move)
         else:
-            root = Node(state, ai_player)
-            mcts(root, 1000)
-            node = root.children[0]
-            max_score = node.wins / node.visits
-            for child in root.children:
-                score = child.wins / child.visits
-                if score > max_score:
-                    max_score = score
-                    node = child
-            state_difference = [np.abs(root.state.board[i] - node.state.board[i]) for i in range(len(root.state.board))]
-            move = np.argmax(state_difference)
+            move = get_mcts_move(state, ai_player)
         state.play_move(move, current_player)
         current_player *= -1
     state.display_board()
@@ -76,4 +64,24 @@ def play_mcts():
     else:
         print('Draw!')
 
-play_mcts()
+human_player = None
+try_again = True
+while try_again:
+    while human_player == None:
+        human_starts = input("Do you want to play first (Y/N)?")
+        human_starts = human_starts[0].upper()
+        if human_starts == "Y":
+            human_player = 1
+        elif human_starts == "N":
+            human_player = -1
+        else:
+            print("Sorry, we did not understand your answer. Please answer using Y/N")
+    play_mcts(human_player)
+    try_again_str = input("Try again ? (Y/N)")
+    try_again_str = try_again_str[0].upper()
+    if try_again_str == "Y":
+        try_again = True
+    elif try_again_str == "N":
+        try_again = False
+    else:
+        print("Sorry, we did not understand your answer. Please answer using Y/N")

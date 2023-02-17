@@ -67,6 +67,19 @@ def mcts(root, n):
             child_node = node
         result = root.player * child_node.simulate()
         child_node.backpropagate(result)
-state = ttt.TicTacToeState()
-root = Node(state, 1)
-mcts(root, 1000)     
+
+
+def get_mcts_move(state, player):
+    root = Node(state, player)
+    mcts(root, 1000)
+    node = root.children[0]
+    max_score = node.wins / node.visits
+    for child in root.children:
+        score = child.wins / child.visits
+        if score > max_score:
+            max_score = score
+            node = child
+    state_difference = [np.abs(root.state.board[i] - node.state.board[i]) for i in range(len(root.state.board))]
+    move = np.argmax(state_difference)
+    return move
+    
