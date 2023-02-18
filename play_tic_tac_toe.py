@@ -49,7 +49,7 @@ def play_mcts(human_player):
             state.display_board()
             print(move)
         else:
-            move = get_mcts_move(state, ai_player)
+            move = get_mcts_move(state, ai_player, 10**4)
         state.play_move(move, current_player)
         current_player *= -1
     state.display_board()

@@ -69,9 +69,9 @@ def mcts(root, n):
         child_node.backpropagate(result)
 
 
-def get_mcts_move(state, player):
+def get_mcts_move(state, player, number_of_iterations):
     root = Node(state, player)
-    mcts(root,  10**4)
+    mcts(root,  number_of_iterations)
     node = root.children[0]
     max_score = node.wins / node.visits
     for child in root.children:
